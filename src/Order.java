@@ -5,21 +5,21 @@ public class Order {
   private int status;
   private int customer_id;
 
-  public Order(String product_name, int count, int total_price, int status, int customer_id) {
-    this.product_name = product_name;
-    this.count = count;
-    this.total_price = total_price;
-    this.status = status;
-    this.customer_id = customer_id;
+  public Order(final String product_name, final int count, final int total_price, final int status,
+      final int customer_id) {
+    setProduct_name(product_name);
+    setCount(count);
+    setTotal_price(total_price);
+    setStatus(status);
+    setCustomer_id(customer_id);
   }
 
-  // region Methods
   public void print_order() {
-    System.out.print("Product name: " + product_name);
-    System.out.print(" - Count: " + count);
-    System.out.print(" - Total price: " + total_price);
+    System.out.print("Product name: " + getProduct_name());
+    System.out.print(" - Count: " + getCount());
+    System.out.print(" - Total price: " + getTotal_price());
     System.out.print(" - Status: ");
-    switch (status) {
+    switch (getStatus()) {
       case 0:
         System.out.println("Initialized");
         break;
@@ -34,14 +34,12 @@ public class Order {
         break;
     }
   }
-  // endregion Methods
 
-  // region Getters and Setters
   public String getProduct_name() {
     return product_name;
   }
 
-  public void setProduct_name(String product_name) {
+  public void setProduct_name(final String product_name) {
     this.product_name = product_name;
   }
 
@@ -49,7 +47,7 @@ public class Order {
     return count;
   }
 
-  public void setCount(int count) {
+  public void setCount(final int count) {
     this.count = count;
   }
 
@@ -57,7 +55,7 @@ public class Order {
     return total_price;
   }
 
-  public void setTotal_price(int total_price) {
+  public void setTotal_price(final int total_price) {
     this.total_price = total_price;
   }
 
@@ -65,7 +63,7 @@ public class Order {
     return status;
   }
 
-  public void setStatus(int status) {
+  public void setStatus(final int status) {
     this.status = status;
   }
 
@@ -73,9 +71,8 @@ public class Order {
     return customer_id;
   }
 
-  public void setCustomer_id(int customer_id) {
+  public void setCustomer_id(final int customer_id) {
     this.customer_id = customer_id;
   }
-  // endregion Getters and Setters
 
 }

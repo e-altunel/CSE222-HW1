@@ -7,72 +7,70 @@ public class Database {
   private Order[] orders;
   private int order_count;
 
-  public Database(String file_name) {
-    persons = new Person[100];
-    person_count = 0;
-    orders = new Order[100];
-    order_count = 0;
+  public Database(final String file_name) {
+    setPersons(new Person[100]);
+    setPerson_count(0);
+    setOrders(new Order[100]);
+    setOrder_count(0);
     try {
       readFromFile(file_name);
-    } catch (Exception e) {
-      System.out.println("Error reading from file: " + e.getMessage());
-      System.out.println(person_count + " " + order_count);
+    } catch (final Exception e) {
       System.out.println("File not found: " + file_name);
       return;
     }
   }
 
-  public void readFromFile(String file_name)
+  public void readFromFile(final String file_name)
       throws Exception {
-    File file = new File(file_name);
-    Scanner scanner = new Scanner(file);
+    final File file = new File(file_name);
+    final Scanner scanner = new Scanner(file);
     while (scanner.hasNextLine()) {
-      String line = scanner.nextLine();
-      String[] parts = line.split(";");
-      String className = parts[0];
+      final String line = scanner.nextLine();
+      final String[] parts = line.split(";");
+      final String className = parts[0];
       try {
         switch (className) {
           case "operator":
-            persons[person_count] = parseOperator(parts);
-            person_count++;
+            getPersons()[getPerson_count()] = parseOperator(parts);
+            setPerson_count(getPerson_count() + 1);
             break;
           case "retail_customer":
-            persons[person_count] = parseRetailCustomer(parts);
-            person_count++;
+            getPersons()[getPerson_count()] = parseRetailCustomer(parts);
+            setPerson_count(getPerson_count() + 1);
             break;
           case "corporate_customer":
-            persons[person_count] = parseCorporateCustomer(parts);
-            person_count++;
+            getPersons()[getPerson_count()] = parseCorporateCustomer(parts);
+            setPerson_count(getPerson_count() + 1);
             break;
           case "order":
-            orders[order_count] = parseOrder(parts);
-            order_count++;
+            getOrders()[getOrder_count()] = parseOrder(parts);
+            setOrder_count(getOrder_count() + 1);
             break;
           default:
             scanner.close();
             throw new IllegalArgumentException("Invalid class name: " + className);
         }
-      } catch (IllegalArgumentException e) {
+      } catch (final IllegalArgumentException e) {
         System.out.println(e.getMessage());
       }
     }
     scanner.close();
-    for (int i = 0; i < order_count; i++) {
-      addOrderTo(orders[i].getCustomer_id(), orders[i]);
+    for (int i = 0; i < getOrder_count(); i++) {
+      addOrderTo(getOrders()[i].getCustomer_id(), getOrders()[i]);
     }
-    for (int i = 0; i < person_count; i++) {
-      if (persons[i] instanceof Customer) {
-        addCustomerTo(((Customer) persons[i]).getOperator_id(), (Customer) persons[i]);
+    for (int i = 0; i < getPerson_count(); i++) {
+      if (getPersons()[i] instanceof Customer) {
+        addCustomerTo(((Customer) getPersons()[i]).getOperator_id(), (Customer) getPersons()[i]);
       }
     }
   }
 
-  private Operator parseOperator(String[] parts)
+  private Operator parseOperator(final String[] parts)
       throws IllegalArgumentException {
     if (parts.length != 7 || !checkStrings(parts)) {
       throw new IllegalArgumentException("Invalid operator data: " + String.join(";", parts));
     }
-    Operator operator = new Operator(parts[1], parts[2], parts[3], parts[4], Integer.parseInt(parts[5]),
+    final Operator operator = new Operator(parts[1], parts[2], parts[3], parts[4], Integer.parseInt(parts[5]),
         Integer.parseInt(parts[6]));
     if (getPerson(operator.getId()) != null) {
       throw new IllegalArgumentException("Duplicate person id: " + operator.getId());
@@ -80,11 +78,11 @@ public class Database {
     return operator;
   }
 
-  private CorporateCustomer parseCorporateCustomer(String[] parts) {
+  private CorporateCustomer parseCorporateCustomer(final String[] parts) {
     if (parts.length != 8 || !checkStrings(parts)) {
       throw new IllegalArgumentException("Invalid corporate customer data: " + String.join(";", parts));
     }
-    CorporateCustomer corporateCustomer = new CorporateCustomer(parts[1], parts[2], parts[3], parts[4],
+    final CorporateCustomer corporateCustomer = new CorporateCustomer(parts[1], parts[2], parts[3], parts[4],
         Integer.parseInt(parts[5]), Integer.parseInt(parts[6]), parts[7]);
     if (getPerson(corporateCustomer.getId()) != null) {
       throw new IllegalArgumentException("Duplicate person id: " + corporateCustomer.getId());
@@ -92,11 +90,11 @@ public class Database {
     return corporateCustomer;
   }
 
-  private RetailCustomer parseRetailCustomer(String[] parts) {
+  private RetailCustomer parseRetailCustomer(final String[] parts) {
     if (parts.length != 7 || !checkStrings(parts)) {
       throw new IllegalArgumentException("Invalid retail customer data: " + String.join(";", parts));
     }
-    RetailCustomer retailCustomer = new RetailCustomer(parts[1], parts[2], parts[3], parts[4],
+    final RetailCustomer retailCustomer = new RetailCustomer(parts[1], parts[2], parts[3], parts[4],
         Integer.parseInt(parts[5]),
         Integer.parseInt(parts[6]));
     if (getPerson(retailCustomer.getId()) != null) {
@@ -105,28 +103,28 @@ public class Database {
     return retailCustomer;
   }
 
-  private Order parseOrder(String[] parts) {
+  private Order parseOrder(final String[] parts) {
     if (parts.length != 6 || !checkStrings(parts)) {
       throw new IllegalArgumentException("Invalid order data: " + String.join(";", parts));
     }
-    Order order = new Order(parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3]),
+    final Order order = new Order(parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3]),
         Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
     if (order.getCount() > 0)
       return order;
     throw new IllegalArgumentException("Invalid order count: " + order.getCount());
   }
 
-  public Person getPerson(int id) {
-    for (int i = 0; i < person_count; i++) {
-      if (persons[i].getId() == id) {
-        return persons[i];
+  public Person getPerson(final int id) {
+    for (int i = 0; i < getPerson_count(); i++) {
+      if (getPersons()[i].getId() == id) {
+        return getPersons()[i];
       }
     }
     return null;
   }
 
-  private boolean checkStrings(String[] parts) {
-    for (String part : parts) {
+  private static boolean checkStrings(final String[] parts) {
+    for (final String part : parts) {
       if (part == null || part.length() == 0) {
         return false;
       }
@@ -134,15 +132,15 @@ public class Database {
     return true;
   }
 
-  private void addCustomerTo(int operator_id, Customer customer) {
-    Operator operator = (Operator) getPerson(operator_id);
+  private void addCustomerTo(final int operator_id, final Customer customer) {
+    final Operator operator = (Operator) getPerson(operator_id);
     if (operator == null)
       throw new IllegalArgumentException("Operator not found: " + operator_id);
     operator.addCustomer(customer);
   }
 
-  private void addOrderTo(int customer_id, Order order) {
-    Customer customer = (Customer) getPerson(customer_id);
+  private void addOrderTo(final int customer_id, final Order order) {
+    final Customer customer = (Customer) getPerson(customer_id);
     if (customer == null)
       throw new IllegalArgumentException("Customer not found: " + customer_id);
     customer.addOrder(order);
@@ -152,7 +150,7 @@ public class Database {
     return persons;
   }
 
-  public void setPersons(Person[] persons) {
+  public void setPersons(final Person[] persons) {
     this.persons = persons;
   }
 
@@ -160,7 +158,7 @@ public class Database {
     return person_count;
   }
 
-  public void setPerson_count(int person_count) {
+  public void setPerson_count(final int person_count) {
     this.person_count = person_count;
   }
 
@@ -168,7 +166,7 @@ public class Database {
     return orders;
   }
 
-  public void setOrders(Order[] orders) {
+  public void setOrders(final Order[] orders) {
     this.orders = orders;
   }
 
@@ -176,7 +174,7 @@ public class Database {
     return order_count;
   }
 
-  public void setOrder_count(int order_count) {
+  public void setOrder_count(final int order_count) {
     this.order_count = order_count;
   }
 }
