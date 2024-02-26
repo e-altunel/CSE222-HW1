@@ -13,9 +13,7 @@ public abstract class Person {
     this.id = id;
   }
 
-  public String toString() {
-    return id + " " + name + " " + surname;
-  }
+  public abstract void print();
 
   // region Getters and Setters
 

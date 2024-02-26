@@ -8,21 +8,44 @@ public class Main {
   static final String file_name = "content.txt";
 
   public static void main(String[] args) {
-    Person[] database;
-    try {
-      database = readPersonsFromFile(file_name);
-    } catch (FileNotFoundException e) {
-      System.out.println("File not found: " + file_name);
+    Database db = new Database(file_name);
+
+    System.out.println("Please enter your ID: ");
+    Scanner scanner = new Scanner(System.in);
+    int id = scanner.nextInt();
+    scanner.close();
+    Person p = db.getPerson(id);
+    if (p == null) {
+      System.out.println("No person found with ID: " + id);
       return;
     }
+    if (p instanceof Operator)
+      System.out.println("*** Operator ***");
+    else if (p instanceof Customer)
+      System.out.println("*** Customer ***");
+    p.print();
 
-    for (Person p : database) {
-      if (p instanceof CorporateCustomer) {
-        ((CorporateCustomer) p).print_customer();
-        ((CorporateCustomer) p).print_orders();
-        break;
-      }
-    }
+    /*
+     * 
+     * Person[] database;
+     * try {
+     * database = readPersonsFromFile(file_name);
+     * } catch (FileNotFoundException e) {
+     * System.out.println("File not found: " + file_name);
+     * return;
+     * }
+     * 
+     * for (Person p : database) {
+     * if (p instanceof Operator) {
+     * ((Operator) p).print_operator();
+     * ((Operator) p).print_customers();
+     * } else if (p instanceof Customer) {
+     * ((Customer) p).print_customer();
+     * ((Customer) p).print_orders();
+     * }
+     * System.out.println("\033[31m--------------------------\033[0m");
+     * }
+     */
   }
 
   private static Person[] readPersonsFromFile(String file_name) throws FileNotFoundException {
