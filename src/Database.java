@@ -15,7 +15,7 @@ public class Database {
     try {
       readFromFile(file_name);
     } catch (final Exception e) {
-      System.out.println("File not found: " + file_name);
+      System.out.println(e.getMessage());
       return;
     }
   }
@@ -24,11 +24,18 @@ public class Database {
       throws Exception {
     final File file = new File(file_name);
     final Scanner scanner = new Scanner(file);
+    int line_count = 0;
+    boolean hasError = false;
     while (scanner.hasNextLine()) {
       final String line = scanner.nextLine();
+      line_count++;
       final String[] parts = line.split(";");
-      final String className = parts[0];
       try {
+        if (line.length() == 0)
+          throw new IllegalArgumentException("Empty line");
+        if (parts.length == 0)
+          throw new IllegalArgumentException("Line without semicolon");
+        final String className = parts[0];
         switch (className) {
           case "operator":
             getPersons()[getPerson_count()] = parseOperator(parts);
@@ -50,17 +57,45 @@ public class Database {
             scanner.close();
             throw new IllegalArgumentException("Invalid class name: " + className);
         }
-      } catch (final IllegalArgumentException e) {
-        System.out.println(e.getMessage());
+      } catch (final Exception e) {
+        if (!hasError) {
+          hasError = true;
+          System.out.println("* Syntax errors in the file: ");
+        }
+        System.out.println("Line " + line_count + " -> " + e.getMessage());
+        continue;
       }
     }
     scanner.close();
+    hasError = false;
+    try {
+      linkData();
+    } catch (final Exception e) {
+      if (!hasError) {
+        hasError = true;
+        System.out.println("* Linking errors: ");
+      }
+      System.out.println(e.getMessage());
+    }
+  }
+
+  private void linkData() {
     for (int i = 0; i < getOrder_count(); i++) {
-      addOrderTo(getOrders()[i].getCustomer_id(), getOrders()[i]);
+      try {
+        addOrderTo(getOrders()[i].getCustomer_id(), getOrders()[i]);
+      } catch (final Exception e) {
+        removePerson(i);
+        throw e;
+      }
     }
     for (int i = 0; i < getPerson_count(); i++) {
       if (getPersons()[i] instanceof Customer) {
-        addCustomerTo(((Customer) getPersons()[i]).getOperator_id(), (Customer) getPersons()[i]);
+        try {
+          addCustomerTo(((Customer) getPersons()[i]).getOperator_id(), (Customer) getPersons()[i]);
+        } catch (final Exception e) {
+          removePerson(i);
+          throw e;
+        }
       }
     }
   }
@@ -154,6 +189,13 @@ public class Database {
     this.persons = persons;
   }
 
+  public void removePerson(final int index) {
+    for (int i = index; i < getPerson_count() - 1; i++) {
+      getPersons()[i] = getPersons()[i + 1];
+    }
+    setPerson_count(getPerson_count() - 1);
+  }
+
   public int getPerson_count() {
     return person_count;
   }
@@ -168,6 +210,13 @@ public class Database {
 
   public void setOrders(final Order[] orders) {
     this.orders = orders;
+  }
+
+  public void removeOrder(final int index) {
+    for (int i = index; i < getOrder_count() - 1; i++) {
+      getOrders()[i] = getOrders()[i + 1];
+    }
+    setOrder_count(getOrder_count() - 1);
   }
 
   public int getOrder_count() {
