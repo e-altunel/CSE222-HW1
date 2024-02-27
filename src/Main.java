@@ -8,7 +8,14 @@ public class Main {
 
     System.out.println("Please enter your ID: ");
     final Scanner scanner = new Scanner(System.in);
-    final int id = scanner.nextInt();
+    int id = -1;
+    try {
+      id = scanner.nextInt();
+    } catch (final Exception e) {
+      System.out.println("Invalid ID");
+      scanner.close();
+      return;
+    }
     scanner.close();
     final Person p = db.getPerson(id);
     if (p == null) {
