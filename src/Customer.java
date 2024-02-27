@@ -55,6 +55,8 @@ public abstract class Customer extends Person {
   }
 
   public void setOperator_id(final int operator_id) {
+    if (operator_id <= 0)
+      throw new IllegalArgumentException("Operator ID is invalid: " + operator_id);
     this.operator_id = operator_id;
   }
 

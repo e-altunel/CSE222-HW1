@@ -40,6 +40,10 @@ public class Order {
   }
 
   public void setProduct_name(final String product_name) {
+    if (product_name == null)
+      throw new IllegalArgumentException("Product name is null");
+    if (product_name.length() == 0)
+      throw new IllegalArgumentException("Product name is empty");
     this.product_name = product_name;
   }
 
@@ -48,6 +52,8 @@ public class Order {
   }
 
   public void setCount(final int count) {
+    if (count <= 0)
+      throw new IllegalArgumentException("Count is invalid: " + count);
     this.count = count;
   }
 
@@ -56,6 +62,8 @@ public class Order {
   }
 
   public void setTotal_price(final int total_price) {
+    if (total_price <= 0)
+      throw new IllegalArgumentException("Total price is invalid: " + total_price);
     this.total_price = total_price;
   }
 
@@ -64,6 +72,8 @@ public class Order {
   }
 
   public void setStatus(final int status) {
+    if (status < 0 || status > 3)
+      throw new IllegalArgumentException("Status is invalid: " + status);
     this.status = status;
   }
 
@@ -72,6 +82,8 @@ public class Order {
   }
 
   public void setCustomer_id(final int customer_id) {
+    if (customer_id <= 0)
+      throw new IllegalArgumentException("Customer ID is invalid: " + customer_id);
     this.customer_id = customer_id;
   }
 

@@ -14,6 +14,10 @@ public class CorporateCustomer extends Customer {
   }
 
   public String getCompany_name() {
+    if (company_name == null)
+      throw new IllegalArgumentException("Company name is null");
+    if (company_name.length() == 0)
+      throw new IllegalArgumentException("Company name is empty");
     return company_name;
   }
 

@@ -58,6 +58,8 @@ public class Operator extends Person {
   }
 
   public void setWage(final int wage) {
+    if (wage <= 0)
+      throw new IllegalArgumentException("Wage is invalid: " + wage);
     this.wage = wage;
   }
 
