@@ -144,7 +144,7 @@ public class Database {
 
   private Operator parseOperator(final String[] parts)
       throws IllegalArgumentException {
-    if (parts.length != 7 || !checkStrings(parts)) {
+    if (parts.length != 7 || checkStrings(parts) == 0) {
       throw new IllegalArgumentException("Invalid operator data: " + String.join(";", parts));
     }
     final Operator operator = new Operator(parts[1], parts[2], parts[3], parts[4], Integer.parseInt(parts[5]),
@@ -156,7 +156,7 @@ public class Database {
   }
 
   private CorporateCustomer parseCorporateCustomer(final String[] parts) {
-    if (parts.length != 8 || !checkStrings(parts)) {
+    if (parts.length != 8 || checkStrings(parts) == 0) {
       throw new IllegalArgumentException("Invalid corporate customer data: " + String.join(";", parts));
     }
     final CorporateCustomer corporateCustomer = new CorporateCustomer(parts[1], parts[2], parts[3], parts[4],
@@ -168,7 +168,7 @@ public class Database {
   }
 
   private RetailCustomer parseRetailCustomer(final String[] parts) {
-    if (parts.length != 7 || !checkStrings(parts)) {
+    if (parts.length != 7 || checkStrings(parts) == 0) {
       throw new IllegalArgumentException("Invalid retail customer data: " + String.join(";", parts));
     }
     final RetailCustomer retailCustomer = new RetailCustomer(parts[1], parts[2], parts[3], parts[4],
@@ -181,7 +181,7 @@ public class Database {
   }
 
   private Order parseOrder(final String[] parts) {
-    if (parts.length != 6 || !checkStrings(parts)) {
+    if (parts.length != 6 || checkStrings(parts) == 0) {
       throw new IllegalArgumentException("Invalid order data: " + String.join(";", parts));
     }
     final Order order = new Order(parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3]),
@@ -200,13 +200,13 @@ public class Database {
     return null;
   }
 
-  private static boolean checkStrings(final String[] parts) {
+  private static int checkStrings(final String[] parts) {
     for (final String part : parts) {
       if (part == null || part.length() == 0) {
-        return false;
+        return 0;
       }
     }
-    return true;
+    return 1;
   }
 
   public Person[] getPersons() {
