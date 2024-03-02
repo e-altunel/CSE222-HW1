@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-  static final String file_name = "content.txt";
+  static private final String file_name = "content.txt";
 
   public static void main(final String[] args) {
     final Database db = new Database(file_name);

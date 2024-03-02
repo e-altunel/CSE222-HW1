@@ -1,7 +1,7 @@
 public class Operator extends Person {
-  private int wage;
-  private Customer[] customers;
-  private int customer_count;
+  protected int wage;
+  protected Customer[] customers;
+  protected int customer_count;
 
   public Operator(final String name, final String surname, final String address, final String phone, final int id,
       final int wage) {

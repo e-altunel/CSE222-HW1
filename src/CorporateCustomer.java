@@ -1,5 +1,5 @@
 public class CorporateCustomer extends Customer {
-  String company_name;
+  protected String company_name;
 
   public CorporateCustomer(final String name, final String surname, final String address, final String phone,
       final int id, final int operator_id,

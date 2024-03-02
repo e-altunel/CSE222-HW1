@@ -1,9 +1,9 @@
 public class Order {
-  private String product_name;
-  private int count;
-  private int total_price;
-  private int status;
-  private int customer_id;
+  protected String product_name;
+  protected int count;
+  protected int total_price;
+  protected int status;
+  protected int customer_id;
 
   public Order(final String product_name, final int count, final int total_price, final int status,
       final int customer_id) {

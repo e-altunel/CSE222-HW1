@@ -1,7 +1,7 @@
 public abstract class Customer extends Person {
-  private Order[] orders;
-  private int order_count;
-  private int operator_id;
+  protected Order[] orders;
+  protected int order_count;
+  protected int operator_id;
 
   public Customer(final String name, final String surname, final String address, final String phone, final int id,
       final int operator_id) {

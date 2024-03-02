@@ -1,9 +1,9 @@
 public abstract class Person {
-  private String name;
-  private String surname;
-  private String address;
-  private String phone;
-  private int id;
+  protected String name;
+  protected String surname;
+  protected String address;
+  protected String phone;
+  protected int id;
 
   public Person(final String name, final String surname, final String address, final String phone, final int id) {
     setName(name);

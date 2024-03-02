@@ -2,10 +2,10 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Database {
-  private Person[] persons;
-  private int person_count;
-  private Order[] orders;
-  private int order_count;
+  protected Person[] persons;
+  protected int person_count;
+  protected Order[] orders;
+  protected int order_count;
 
   public Database(final String file_name) {
     setPersons(new Person[100]);
