@@ -60,7 +60,7 @@ public class Database {
       } catch (final Exception e) {
         if (!hasError) {
           hasError = true;
-          System.out.println("* Syntax errors in the file: ");
+          System.out.println("* Errors in the file: ");
         }
         System.out.println("Line " + line_count + " -> " + e.getMessage());
         continue;
