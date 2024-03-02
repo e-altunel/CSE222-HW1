@@ -1,14 +1,12 @@
 public class Operator extends Person {
   protected int wage;
   protected Customer[] customers;
-  protected int customer_count;
 
   public Operator(final String name, final String surname, final String address, final String phone, final int id,
       final int wage) {
     super(name, surname, address, phone, id);
     setWage(wage);
     setCustomers(new Customer[100]);
-    setCustomer_count(0);
   }
 
   public void print() {
@@ -27,7 +25,9 @@ public class Operator extends Person {
   }
 
   public void print_customers() {
-    for (int i = 0; i < getCustomer_count(); i++) {
+    for (int i = 0; i < getCustomers().length; i++) {
+      if (getCustomers()[i] == null)
+        break;
       System.out.print("Customer #" + (i + 1) + " ");
       if (getCustomers()[i] instanceof RetailCustomer)
         System.out.println("( a reatil customer )");
@@ -38,7 +38,7 @@ public class Operator extends Person {
       getCustomers()[i].print();
       System.out.println("--------------------------");
     }
-    if (getCustomer_count() == 0) {
+    if (getCustomers().length == 0 || getCustomers()[0] == null) {
       System.out.println("This operator doesn't have any customers.");
       System.out.println("--------------------------");
     }
@@ -46,11 +46,6 @@ public class Operator extends Person {
 
   public void define_customers(final Customer[] customers) {
     setCustomers(customers);
-  }
-
-  public void addCustomer(final Customer customer) {
-    getCustomers()[getCustomer_count()] = customer;
-    setCustomer_count(getCustomer_count() + 1);
   }
 
   public int getWage() {
@@ -70,13 +65,4 @@ public class Operator extends Person {
   public void setCustomers(final Customer[] customers) {
     this.customers = customers;
   }
-
-  public int getCustomer_count() {
-    return customer_count;
-  }
-
-  public void setCustomer_count(final int customer_count) {
-    this.customer_count = customer_count;
-  }
-
 }

@@ -1,6 +1,5 @@
 public abstract class Customer extends Person {
   protected Order[] orders;
-  protected int order_count;
   protected int operator_id;
 
   public Customer(final String name, final String surname, final String address, final String phone, final int id,
@@ -8,7 +7,6 @@ public abstract class Customer extends Person {
     super(name, surname, address, phone, id);
     setOperator_id(operator_id);
     setOrders(new Order[100]);
-    setOrder_count(0);
   }
 
   public void print() {
@@ -25,21 +23,18 @@ public abstract class Customer extends Person {
   }
 
   public void print_orders() {
-    for (int i = 0; i < getOrder_count(); i++) {
+    for (int i = 0; i < getOrders().length; i++) {
+      if (getOrders()[i] == null)
+        break;
       System.out.print("Order #" + (i + 1) + " => ");
       getOrders()[i].print_order();
     }
-    if (getOrder_count() == 0)
+    if (getOrders().length == 0 || getOrders()[0] == null)
       System.out.println("This customer doesn't have any orders.");
   }
 
   public void define_orders(final Order[] orders) {
     setOrders(orders);
-  }
-
-  public void addOrder(final Order order) {
-    getOrders()[getOrder_count()] = order;
-    setOrder_count(getOrder_count() + 1);
   }
 
   public Order[] getOrders() {
@@ -58,13 +53,5 @@ public abstract class Customer extends Person {
     if (operator_id <= 0)
       throw new IllegalArgumentException("Operator ID is invalid: " + operator_id);
     this.operator_id = operator_id;
-  }
-
-  public int getOrder_count() {
-    return order_count;
-  }
-
-  public void setOrder_count(final int order_count) {
-    this.order_count = order_count;
   }
 }

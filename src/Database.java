@@ -80,22 +80,31 @@ public class Database {
   }
 
   private void linkData() {
-    for (int i = 0; i < getOrder_count(); i++) {
-      try {
-        addOrderTo(getOrders()[i].getCustomer_id(), getOrders()[i]);
-      } catch (final Exception e) {
-        removePerson(i);
-        throw e;
+    for (int i = 0; i < getPerson_count(); i++) {
+      if (getPersons()[i] instanceof Customer) {
+        Order[] orders = new Order[100];
+        int order_count = 0;
+        for (int j = 0; j < getOrder_count(); j++) {
+          if (getOrders()[j].getCustomer_id() == getPersons()[i].getId()) {
+            orders[order_count] = getOrders()[j];
+            order_count++;
+          }
+        }
+        ((Customer) getPersons()[i]).define_orders(orders);
       }
     }
     for (int i = 0; i < getPerson_count(); i++) {
-      if (getPersons()[i] instanceof Customer) {
-        try {
-          addCustomerTo(((Customer) getPersons()[i]).getOperator_id(), (Customer) getPersons()[i]);
-        } catch (final Exception e) {
-          removePerson(i);
-          throw e;
+      if (getPersons()[i] instanceof Operator) {
+        Customer[] customers = new Customer[100];
+        int customer_count = 0;
+        for (int j = 0; j < getPerson_count(); j++) {
+          if (getPersons()[j] instanceof Customer
+              && ((Customer) getPersons()[j]).getOperator_id() == getPersons()[i].getId()) {
+            customers[customer_count] = (Customer) getPersons()[j];
+            customer_count++;
+          }
         }
+        ((Operator) getPersons()[i]).define_customers(customers);
       }
     }
   }
@@ -165,20 +174,6 @@ public class Database {
       }
     }
     return true;
-  }
-
-  private void addCustomerTo(final int operator_id, final Customer customer) {
-    final Operator operator = (Operator) getPerson(operator_id);
-    if (operator == null)
-      throw new IllegalArgumentException("Operator not found: " + operator_id);
-    operator.addCustomer(customer);
-  }
-
-  private void addOrderTo(final int customer_id, final Order order) {
-    final Customer customer = (Customer) getPerson(customer_id);
-    if (customer == null)
-      throw new IllegalArgumentException("Customer not found: " + customer_id);
-    customer.addOrder(order);
   }
 
   public Person[] getPersons() {
