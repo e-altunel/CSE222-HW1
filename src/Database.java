@@ -31,6 +31,10 @@ public class Database {
       line_count++;
       final String[] parts = line.split(";");
       try {
+        final int part_count = countChar(line, ';') + 1;
+        if (part_count != parts.length) {
+          throw new IllegalArgumentException("Invalid semicolon count");
+        }
         if (line.length() == 0)
           throw new IllegalArgumentException("Empty line");
         if (parts.length == 0)
@@ -249,5 +253,15 @@ public class Database {
 
   public void setOrder_count(final int order_count) {
     this.order_count = order_count;
+  }
+
+  private int countChar(final String str, final char c) {
+    int count = 0;
+    for (int i = 0; i < str.length(); i++) {
+      if (str.charAt(i) == c) {
+        count++;
+      }
+    }
+    return count;
   }
 }
