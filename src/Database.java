@@ -32,9 +32,8 @@ public class Database {
       final String[] parts = line.split(";");
       try {
         final int part_count = countChar(line, ';') + 1;
-        if (part_count != parts.length) {
+        if (part_count != parts.length)
           throw new IllegalArgumentException("Invalid semicolon count");
-        }
         if (line.length() == 0)
           throw new IllegalArgumentException("Empty line");
         if (parts.length == 0)
@@ -107,25 +106,22 @@ public class Database {
   }
 
   private int checkId(final int id) {
-    for (int i = 0; i < getPerson_count(); i++) {
-      if (getPersons()[i].getId() == id) {
+    for (int i = 0; i < getPerson_count(); i++)
+      if (getPersons()[i].getId() == id)
         return 1;
-      }
-    }
     return 0;
   }
 
   private void removeUnlinkedOrders(int isCustomer) {
     for (int i = getOrder_count() - 1; i >= 0; i--) {
       if (checkId(getOrders()[i].getCustomer_id()) == 0) {
-        if (isCustomer == 1) {
+        if (isCustomer == 1)
           System.out
               .println("Order \"" + getOrders()[i].getProduct_name() + "\" is removed because its customer removed");
-        } else {
+        else
           System.out
               .println(
                   "Order \"" + getOrders()[i].getProduct_name() + "\" is removed because its customer is not found");
-        }
         removeOrder(i);
       }
     }
@@ -144,46 +140,39 @@ public class Database {
 
   private Operator parseOperator(final String[] parts)
       throws IllegalArgumentException {
-    if (parts.length != 7 || checkStrings(parts) == 0) {
+    if (parts.length != 7 || checkStrings(parts) == 0)
       throw new IllegalArgumentException("Invalid operator data: " + String.join(";", parts));
-    }
     final Operator operator = new Operator(parts[1], parts[2], parts[3], parts[4], Integer.parseInt(parts[5]),
         Integer.parseInt(parts[6]));
-    if (getPerson(operator.getId()) != null) {
+    if (getPerson(operator.getId()) != null)
       throw new IllegalArgumentException("Duplicate person id: " + operator.getId());
-    }
     return operator;
   }
 
   private CorporateCustomer parseCorporateCustomer(final String[] parts) {
-    if (parts.length != 8 || checkStrings(parts) == 0) {
+    if (parts.length != 8 || checkStrings(parts) == 0)
       throw new IllegalArgumentException("Invalid corporate customer data: " + String.join(";", parts));
-    }
     final CorporateCustomer corporateCustomer = new CorporateCustomer(parts[1], parts[2], parts[3], parts[4],
         Integer.parseInt(parts[5]), Integer.parseInt(parts[6]), parts[7]);
-    if (getPerson(corporateCustomer.getId()) != null) {
+    if (getPerson(corporateCustomer.getId()) != null)
       throw new IllegalArgumentException("Duplicate person id: " + corporateCustomer.getId());
-    }
     return corporateCustomer;
   }
 
   private RetailCustomer parseRetailCustomer(final String[] parts) {
-    if (parts.length != 7 || checkStrings(parts) == 0) {
+    if (parts.length != 7 || checkStrings(parts) == 0)
       throw new IllegalArgumentException("Invalid retail customer data: " + String.join(";", parts));
-    }
     final RetailCustomer retailCustomer = new RetailCustomer(parts[1], parts[2], parts[3], parts[4],
         Integer.parseInt(parts[5]),
         Integer.parseInt(parts[6]));
-    if (getPerson(retailCustomer.getId()) != null) {
+    if (getPerson(retailCustomer.getId()) != null)
       throw new IllegalArgumentException("Duplicate person id: " + retailCustomer.getId());
-    }
     return retailCustomer;
   }
 
   private Order parseOrder(final String[] parts) {
-    if (parts.length != 6 || checkStrings(parts) == 0) {
+    if (parts.length != 6 || checkStrings(parts) == 0)
       throw new IllegalArgumentException("Invalid order data: " + String.join(";", parts));
-    }
     final Order order = new Order(parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3]),
         Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
     if (order.getCount() > 0)
@@ -192,20 +181,16 @@ public class Database {
   }
 
   public Person getPerson(final int id) {
-    for (int i = 0; i < getPerson_count(); i++) {
-      if (getPersons()[i].getId() == id) {
+    for (int i = 0; i < getPerson_count(); i++)
+      if (getPersons()[i].getId() == id)
         return getPersons()[i];
-      }
-    }
     return null;
   }
 
   private static int checkStrings(final String[] parts) {
-    for (final String part : parts) {
-      if (part == null || part.length() == 0) {
+    for (final String part : parts)
+      if (part == null || part.length() == 0)
         return 0;
-      }
-    }
     return 1;
   }
 
@@ -218,9 +203,8 @@ public class Database {
   }
 
   public void removePerson(final int index) {
-    for (int i = index; i < getPerson_count() - 1; i++) {
+    for (int i = index; i < getPerson_count() - 1; i++)
       getPersons()[i] = getPersons()[i + 1];
-    }
     setPerson_count(getPerson_count() - 1);
   }
 
@@ -241,9 +225,8 @@ public class Database {
   }
 
   public void removeOrder(final int index) {
-    for (int i = index; i < getOrder_count() - 1; i++) {
+    for (int i = index; i < getOrder_count() - 1; i++)
       getOrders()[i] = getOrders()[i + 1];
-    }
     setOrder_count(getOrder_count() - 1);
   }
 
@@ -257,11 +240,9 @@ public class Database {
 
   private int countChar(final String str, final char c) {
     int count = 0;
-    for (int i = 0; i < str.length(); i++) {
-      if (str.charAt(i) == c) {
+    for (int i = 0; i < str.length(); i++)
+      if (str.charAt(i) == c)
         count++;
-      }
-    }
     return count;
   }
 }
