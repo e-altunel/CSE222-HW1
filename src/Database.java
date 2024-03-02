@@ -67,16 +67,9 @@ public class Database {
       }
     }
     scanner.close();
-    hasError = false;
-    try {
-      linkData();
-    } catch (final Exception e) {
-      if (!hasError) {
-        hasError = true;
-        System.out.println("* Linking errors: ");
-      }
-      System.out.println(e.getMessage());
-    }
+    linkData();
+    removeUnlinkedOrders(0);
+    removeUnlinkedCustomer();
   }
 
   private void linkData() {
@@ -107,6 +100,42 @@ public class Database {
         ((Operator) getPersons()[i]).define_customers(customers);
       }
     }
+  }
+
+  private int checkId(final int id) {
+    for (int i = 0; i < getPerson_count(); i++) {
+      if (getPersons()[i].getId() == id) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  private void removeUnlinkedOrders(int isCustomer) {
+    for (int i = getOrder_count() - 1; i >= 0; i--) {
+      if (checkId(getOrders()[i].getCustomer_id()) == 0) {
+        if (isCustomer == 1) {
+          System.out
+              .println("Order \"" + getOrders()[i].getProduct_name() + "\" is removed because its customer removed");
+        } else {
+          System.out
+              .println(
+                  "Order \"" + getOrders()[i].getProduct_name() + "\" is removed because its customer is not found");
+        }
+        removeOrder(i);
+      }
+    }
+  }
+
+  public void removeUnlinkedCustomer() {
+    for (int i = getPerson_count() - 1; i >= 0; i--) {
+      if (getPersons()[i] instanceof Customer && checkId(((Customer) getPersons()[i]).getOperator_id()) == 0) {
+        System.out
+            .println("Customer \"" + getPersons()[i].getName() + "\" is removed because its operator is not found");
+        removePerson(i);
+      }
+    }
+    removeUnlinkedOrders(1);
   }
 
   private Operator parseOperator(final String[] parts)
