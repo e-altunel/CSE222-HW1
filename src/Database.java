@@ -57,7 +57,7 @@ public class Database {
             setOrder_count(getOrder_count() + 1);
             break;
           default:
-            scanner.close();
+            // scanner.close();
             throw new IllegalArgumentException("Invalid class name: " + className);
         }
       } catch (final Exception e) {
@@ -71,8 +71,8 @@ public class Database {
     }
     scanner.close();
     linkData();
-    removeUnlinkedOrders(0);
-    removeUnlinkedCustomer();
+    // removeUnlinkedOrders(0);
+    // removeUnlinkedCustomer();
   }
 
   private void linkData() {
